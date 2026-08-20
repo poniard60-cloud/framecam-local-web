@@ -23,6 +23,7 @@ const els = {
   settingsDialog: document.getElementById('settingsDialog'),
   closeSettings: document.getElementById('closeSettings'),
   orientationSelect: document.getElementById('orientationSelect'),
+  cameraFacingSelect: document.getElementById('cameraFacingSelect'),
   frameInput: document.getElementById('frameInput'),
   clearFrameBtn: document.getElementById('clearFrameBtn'),
   titleEnabled: document.getElementById('titleEnabled'),
@@ -61,6 +62,7 @@ let capturing = false;
 let wakeLock = null;
 let frameImage = null;
 let frameObjectUrl = null;
+let frameFormat = null;
 let captureCount = Number(localStorage.getItem(COUNT_KEY) || localStorage.getItem('framecam.count.v1') || '0');
 let lastCapture = null;
 let composingTitle = false;
@@ -70,6 +72,7 @@ const pendingDownloadUrls = new Set();
 
 const settings = Object.assign({
   orientation: 'landscape',
+  cameraFacing: 'environment',
   titleEnabled: false,
   titleText: '',
   titlePosition: 'bottom',
@@ -105,6 +108,7 @@ function setStatus(text, sticky = false) {
 
 function applySettingsToUI() {
   els.orientationSelect.value = settings.orientation;
+  els.cameraFacingSelect.value = settings.cameraFacing;
   els.titleEnabled.checked = Boolean(settings.titleEnabled);
   els.titleText.value = settings.titleText;
   els.titlePosition.value = settings.titlePosition;
@@ -197,7 +201,7 @@ async function startCamera() {
     stream = await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
-        facingMode: { exact: 'environment' },
+        facingMode: { exact: settings.cameraFacing },
         width: { ideal: 2560 },
         height: { ideal: 1920 }
       }
@@ -218,9 +222,9 @@ async function startCamera() {
     els.cameraMessage.hidden = false;
     const messages = {
       NotAllowedError: 'カメラが許可されていません。SafariのWebサイト設定でカメラを「許可」にしてください。',
-      NotFoundError: '背面カメラが見つかりません。端末を確認してください。',
+      NotFoundError: '選択したカメラが見つかりません。端末を確認してください。',
       NotReadableError: 'カメラを利用できません。他のカメラ使用中アプリを閉じてください。',
-      OverconstrainedError: '背面カメラの指定に失敗しました。ページを再読み込みして再度お試しください。',
+      OverconstrainedError: '選択したカメラの指定に失敗しました。別の向きを選ぶか、ページを再読み込みしてください。',
       AbortError: 'カメラの開始が中断されました。もう一度「カメラ再起動」を押してください。'
     };
     const msg = messages[err?.name] || 'カメラを開始できませんでした。Safariを再読み込みして再度お試しください。';

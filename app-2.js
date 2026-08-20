@@ -21,6 +21,26 @@ function drawVideoCover(ctx, video, dw, dh) {
   ctx.drawImage(video, sx, sy, cw, ch, 0, 0, dw, dh);
 }
 
+function drawVideoContain(ctx, video, dw, dh) {
+  const sw = video.videoWidth;
+  const sh = video.videoHeight;
+  if (!sw || !sh) throw new Error('video-not-ready');
+
+  const scale = Math.min(dw / sw, dh / sh);
+  const width = sw * scale;
+  const height = sh * scale;
+  ctx.drawImage(video, 0, 0, sw, sh, (dw - width) / 2, (dh - height) / 2, width, height);
+}
+
+function drawImageCover(ctx, image, dw, dh) {
+  const sw = image.naturalWidth;
+  const sh = image.naturalHeight;
+  const scale = Math.max(dw / sw, dh / sh);
+  const width = sw * scale;
+  const height = sh * scale;
+  ctx.drawImage(image, 0, 0, sw, sh, (dw - width) / 2, (dh - height) / 2, width, height);
+}
+
 function drawTitle(ctx, w, h) {
   const text = settings.titleText.trim();
   if (!settings.titleEnabled || !text) return;

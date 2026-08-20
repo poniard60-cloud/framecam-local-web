@@ -22,8 +22,14 @@ els.orientationSelect.addEventListener('change', e => {
   applySettingsToUI();
   if (changed && frameImage) {
     clearFrame();
-    setStatus('仕上がりの縦横を変更したため、対応するPNGフレームを選び直してください。', true);
+    setStatus('仕上がりの縦横を変更したため、画像を選び直してください。', true);
   }
+});
+
+els.cameraFacingSelect.addEventListener('change', e => {
+  settings.cameraFacing = e.target.value === 'user' ? 'user' : 'environment';
+  persistSettings();
+  if (cameraWanted) void startCamera();
 });
 
 els.frameInput.addEventListener('change', e => void loadFrame(e.target.files?.[0]));

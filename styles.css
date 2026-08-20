@@ -21,8 +21,10 @@ button { cursor: pointer; }
 .preview-wrap { position: relative; container-type: inline-size; overflow: hidden; background: #000; border-radius: 18px; border: 0; outline: 1px solid var(--line); margin: auto; width: min(100%, 820px); box-shadow: 0 10px 36px rgba(0,0,0,.3); }
 .preview-wrap.landscape { aspect-ratio: 3 / 2; }
 .preview-wrap.portrait { aspect-ratio: 2 / 3; width: min(74vw, 430px); max-width: 100%; max-height: 67dvh; }
-.preview-wrap video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
-.frame-overlay { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; pointer-events: none; }
+.preview-wrap video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.frame-overlay { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; object-fit: fill; pointer-events: none; }
+.preview-wrap.jpeg-background video { object-fit: contain; background: transparent; }
+.preview-wrap.jpeg-background .frame-overlay { z-index: 0; object-fit: cover; }
 .title-overlay { position: absolute; left: 5%; right: 5%; z-index: 3; padding: .38em 0; border-radius: .25em; text-align: center; font-weight: 800; line-height: 1.16; text-shadow: 0 1px 2px rgba(0,0,0,.4); overflow-wrap: anywhere; white-space: pre-line; pointer-events: none; }
 .title-overlay.top { top: 4%; }
 .title-overlay.bottom { bottom: 4%; }
