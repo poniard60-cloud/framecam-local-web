@@ -17,8 +17,13 @@ function capture() {
   const ctx = canvas.getContext('2d', { alpha: false });
 
   try {
-    drawVideoCover(ctx, els.video, w, h);
-    if (frameImage) ctx.drawImage(frameImage, 0, 0, w, h);
+    if (frameImage && frameFormat === 'jpeg') {
+      drawImageCover(ctx, frameImage, w, h);
+      drawVideoContain(ctx, els.video, w, h);
+    } else {
+      drawVideoCover(ctx, els.video, w, h);
+      if (frameImage) ctx.drawImage(frameImage, 0, 0, w, h);
+    }
     drawTitle(ctx, w, h);
 
     const blob = canvasToJpegBlobSync(canvas, 0.94);
@@ -56,23 +61,26 @@ function flashFeedback() {
   setTimeout(() => flash.remove(), 220);
 }
 
-async function isRealPng(file) {
-  const head = new Uint8Array(await file.slice(0, 8).arrayBuffer());
+async function detectImageFormat(file) {
+  const head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
   const sig = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
-  return head.length === sig.length && sig.every((b, i) => head[i] === b);
+  if (head.length >= sig.length && sig.every((b, i) => head[i] === b)) return 'png';
+  if (head.length >= 3 && head[0] === 0xFF && head[1] === 0xD8 && head[2] === 0xFF) return 'jpeg';
+  return null;
 }
 
 async function loadFrame(file) {
   if (!file) return;
 
   if (file.size > MAX_FRAME_BYTES) {
-    setStatus(`フレームPNGが大きすぎます（上限12MB）`, true);
+    setStatus('画像が大きすぎます（上限12MB）', true);
     els.frameInput.value = '';
     return;
   }
 
-  if (!(await isRealPng(file))) {
-    setStatus('透過PNGファイルを選択してください。', true);
+  const format = await detectImageFormat(file);
+  if (!format) {
+    setStatus('JPEGまたはPNGの画像を選択してください。', true);
     els.frameInput.value = '';
     return;
   }
@@ -84,7 +92,7 @@ async function loadFrame(file) {
     const target = w / h;
     const actual = img.naturalWidth / img.naturalHeight;
 
-    if (!Number.isFinite(actual) || Math.abs(actual - target) / target > 0.02) {
+    if (format === 'png' && (!Number.isFinite(actual) || Math.abs(actual - target) / target > 0.02)) {
       URL.revokeObjectURL(nextUrl);
       els.frameInput.value = '';
       setStatus(settings.orientation === 'landscape'
@@ -96,27 +104,31 @@ async function loadFrame(file) {
     if (frameObjectUrl) URL.revokeObjectURL(frameObjectUrl);
     frameObjectUrl = nextUrl;
     frameImage = img;
+    frameFormat = format;
+    els.previewWrap.classList.toggle('jpeg-background', format === 'jpeg');
     els.frameOverlay.src = frameObjectUrl;
     els.frameOverlay.hidden = false;
-    els.frameName.textContent = `フレーム：${file.name}`;
+    els.frameName.textContent = `${format === 'png' ? 'フレーム' : '背景'}：${file.name}`;
     localStorage.setItem('framecam.frameName.v1', file.name);
-    void putState('activeFrame', { blob: file, name: file.name });
-    setStatus('フレームを読み込みました');
+    void putState('activeFrame', { blob: file, name: file.name, type: file.type, format });
+    setStatus(format === 'png' ? 'PNGフレームを読み込みました' : 'JPEG背景を読み込みました');
   };
   img.onerror = () => {
     URL.revokeObjectURL(nextUrl);
     els.frameInput.value = '';
-    setStatus('PNGを読み込めませんでした。別のファイルを選んでください。', true);
+    setStatus('画像を読み込めませんでした。別のJPEGまたはPNGを選んでください。', true);
   };
   img.src = nextUrl;
 }
 
 function clearFrame() {
   frameImage = null;
+  frameFormat = null;
   if (frameObjectUrl) URL.revokeObjectURL(frameObjectUrl);
   frameObjectUrl = null;
   els.frameOverlay.removeAttribute('src');
   els.frameOverlay.hidden = true;
+  els.previewWrap.classList.remove('jpeg-background');
   els.frameInput.value = '';
   els.frameName.textContent = 'フレーム：未選択';
   localStorage.removeItem('framecam.frameName.v1');
@@ -207,7 +219,9 @@ async function restoreLocalState() {
     await deleteState('lastCapture');
     const savedFrame = await getState('activeFrame');
     if (savedFrame?.blob && savedFrame?.name) {
-      const file = new File([savedFrame.blob], savedFrame.name, { type: 'image/png' });
+      const file = new File([savedFrame.blob], savedFrame.name, {
+        type: savedFrame.type || savedFrame.blob.type || (savedFrame.format === 'jpeg' ? 'image/jpeg' : 'image/png')
+      });
       await loadFrame(file);
     }
   } finally {

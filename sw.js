@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'framecam-local-v1-pages-20260820';
+const CACHE = 'framecam-local-v1-pages-20260821-frame-library';
 const ASSETS = [
   './',
   './index.html',
