@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#111111" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; media-src 'self'; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'; worker-src 'self'; manifest-src 'self';" />
+  <title>FrameCam Local</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="app-title">FrameCam Local</div>
+        <div id="privacyState" class="privacy-state">画像通信なし / 端末内処理</div>
+      </div>
+      <button id="settingsBtn" class="ghost-btn" type="button">設定</button>
+    </header>
+
+    <section class="camera-section">
+      <div id="previewWrap" class="preview-wrap landscape">
+        <video id="video" playsinline muted autoplay></video>
+        <img id="frameOverlay" class="frame-overlay" alt="" hidden />
+        <div id="titleOverlay" class="title-overlay bottom" hidden></div>
+        <div id="cameraMessage" class="camera-message">「カメラ開始」を押してください</div>
+      </div>
+
+      <div class="status-row">
+        <span id="frameName">フレーム：未選択</span>
+        <span id="counter">撮影 0</span>
+      </div>
+
+      <div class="controls">
+        <button id="cameraBtn" class="secondary-btn" type="button">カメラ開始</button>
+        <button id="shootBtn" class="shoot-btn" type="button" disabled aria-label="撮影"><span></span></button>
+        <button id="lastBtn" class="secondary-btn" type="button" disabled>直前確認</button>
+      </div>
+      <div id="saveState" class="save-state">撮影すると完成JPEGの保存処理を開始します</div>
+      <div class="photos-row">
+        <button id="photosImportBtn" class="primary-btn" type="button">写真アプリへ取り込む</button>
+        <button id="photosHelpBtn" class="ghost-btn" type="button">初回設定</button>
+      </div>
+    </section>
+
+    <dialog id="settingsDialog">
+      <div class="settings-panel">
+        <div class="dialog-head">
+          <h2>撮影設定</h2>
+          <button id="closeSettings" class="ghost-btn" type="button">閉じる</button>
+        </div>
+        <label class="field"><span>仕上がり</span><select id="orientationSelect"><option value="landscape">L判 横（3:2）</option><option value="portrait">L判 縦（2:3）</option></select></label>
+        <label class="field"><span>透過PNGフレーム</span><input id="frameInput" type="file" accept="image/png" /></label>
+        <button id="clearFrameBtn" class="ghost-btn wide" type="button">フレームを外す</button>
+        <label class="toggle-row"><span>タイトルを入れる</span><input id="titleEnabled" type="checkbox" /></label>
+        <div id="titleFields" class="title-fields" hidden>
+          <label class="field"><span>タイトル</span><input id="titleText" type="text" maxlength="60" placeholder="例：SUMMER EVENT 2026" /></label>
+          <label class="field"><span>位置</span><select id="titlePosition"><option value="top">上</option><option value="bottom" selected>下</option></select></label>
+          <label class="field"><span>文字サイズ</span><input id="titleSize" type="range" min="40" max="140" step="2" value="72" /></label>
+          <label class="field"><span>文字色</span><select id="titleColor"><option value="white" selected>白</option><option value="black">黒</option></select></label>
+          <label class="toggle-row"><span>背景帯を付ける</span><input id="titleBand" type="checkbox" checked /></label>
+        </div>
+        <button id="resetCountBtn" class="ghost-btn wide" type="button">撮影枚数を0に戻す</button>
+        <div class="note-box"><strong>安全設計</strong><p>この撮影画面は画像をアップロードしません。画像合成はSafari内で行います。写真アプリへの取込はApple標準ショートカットを使い、iCloud写真の同期はiOS側に任せます。</p></div>
+      </div>
+    </dialog>
+
+    <dialog id="photosHelpDialog">
+      <div class="settings-panel">
+        <div class="dialog-head"><h2>写真アプリへの取込設定</h2><button id="closePhotosHelp" class="ghost-btn" type="button">閉じる</button></div>
+        <div class="note-box important"><strong>0円・外部送信なし</strong><p>SafariはWebページから写真ライブラリへ直接書き込めないため、Apple標準の「ショートカット」で端末内のJPEGを写真アプリへ移します。iCloud写真の同期はiOS側に任せます。</p></div>
+        <ol class="setup-list">
+          <li>Safariのダウンロード先を「このiPhone内」に設定します。</li>
+          <li>「ショートカット」アプリで <strong>FrameCam写真取込</strong> を新規作成します。</li>
+          <li>「ダウンロード」フォルダ内の <strong>FRAMECAM_</strong> で始まるJPEGを取得する処理を追加します。</li>
+          <li>「写真アルバムに保存」を追加します。</li>
+          <li>重複防止のため、保存後のJPEGを別フォルダへ移動する処理を追加します。</li>
+        </ol>
+      </div>
+    </dialog>
+
+    <dialog id="lastDialog">
+      <div class="last-panel">
+        <div class="dialog-head"><h2>直前の写真</h2><button id="closeLast" class="ghost-btn" type="button">閉じる</button></div>
+        <img id="lastImage" alt="直前に撮影した写真" />
+        <div id="lastFilename" class="filename"></div>
+        <button id="downloadLastBtn" class="primary-btn wide" type="button">もう一度保存</button>
+        <div class="note-box"><strong>撮り直す場合</strong><p>この画面を閉じてもう一度撮影してください。不要写真は写真アプリ取込後に削除してください。</p></div>
+      </div>
+    </dialog>
+  </main>
+  <canvas id="captureCanvas" hidden></canvas>
+  <script src="app-1.js" defer></script>
+  <script src="app-2.js" defer></script>
+  <script src="app-3.js" defer></script>
+  <script src="app-4.js" defer></script>
+</body>
+</html>
