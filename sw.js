@@ -1,11 +1,12 @@
 'use strict';
-const CACHE = 'framecam-local-v1-pages-20260821-balanced-finder-v1';
+const CACHE = 'framecam-local-v1-pages-20260821-frame-library-v1';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './camera-enhancements.css',
   './frame-window-zoom.css',
+  './frame-library.css',
   './app-1.js',
   './app-2.js',
   './app-3.js',
@@ -15,6 +16,7 @@ const ASSETS = [
   './app-7.js',
   './app-8.js',
   './app-9.js',
+  './app-10.js',
   './manifest.webmanifest'
 ];
 
