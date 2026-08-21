@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'framecam-local-v1-pages-20260821-smooth-pinch-v1';
+const CACHE = 'framecam-local-v1-pages-20260821-larger-shooting-area-v1';
 const ASSETS = [
   './',
   './index.html',
@@ -15,6 +15,7 @@ const ASSETS = [
   './app-7.js',
   './app-8.js',
   './app-9.js',
+  './app-10.js',
   './manifest.webmanifest'
 ];
 
