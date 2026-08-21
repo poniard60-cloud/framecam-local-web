@@ -38,82 +38,75 @@
   transform-origin: center;
 }
 
-/* iPhone portrait: use the mathematical maximum size that keeps the entire
-   2:3 frame visible. UI floats in the unused top/bottom space instead of
-   shrinking the finder. */
+/* iPhone portrait: keep the full frame comfortably large while placing all
+   primary controls below it so they do not cover the custom frame. */
 @media (max-width: 700px) and (orientation: portrait) {
   html, body {
     width: 100%;
     min-height: 100dvh;
     overflow: hidden;
   }
-  body { background: #000; }
+  body { background: var(--bg); }
 
   .app-shell {
-    position: relative;
     width: 100vw;
     height: 100dvh;
     min-height: 100dvh;
-    padding: 0;
-    gap: 0;
+    padding: max(5px, env(safe-area-inset-top)) 0 max(6px, env(safe-area-inset-bottom));
+    gap: 5px;
     overflow: hidden;
   }
 
   .topbar {
-    position: absolute;
-    z-index: 20;
-    top: max(6px, env(safe-area-inset-top));
-    left: 0;
-    right: 0;
-    min-height: 36px;
-    padding: 0 8px;
-    pointer-events: none;
+    position: static;
+    min-height: 38px;
+    padding: 0 10px;
   }
-  .topbar > div { display: none; }
+  .topbar > div { display: block; }
+  .app-title { font-size: 16px; }
+  .privacy-state { display: none; }
   .topbar .ghost-btn {
     margin-left: auto;
     padding: 8px 11px;
-    border-radius: 11px;
-    background: rgba(0,0,0,.52);
-    border-color: rgba(255,255,255,.28);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    pointer-events: auto;
+    border-radius: 10px;
   }
 
   .camera-section {
-    position: relative;
-    display: block;
+    display: flex;
+    flex: 1;
+    min-height: 0;
     width: 100vw;
-    height: 100dvh;
-    min-height: 100dvh;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
     padding: 0;
     margin: 0;
     overflow: hidden;
   }
 
   .preview-wrap {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    border-radius: 0;
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    flex: 0 0 auto;
+    margin: 0 auto;
+    border-radius: 10px;
     outline: 0;
     box-shadow: none;
   }
 
   .preview-wrap.portrait {
-    width: 100vw;
-    max-width: none;
-    max-height: none;
+    width: min(92vw, calc((100dvh - 170px) * 2 / 3));
+    max-width: 92vw;
+    max-height: calc(100dvh - 170px);
     aspect-ratio: 2 / 3;
   }
 
   .preview-wrap.landscape {
-    width: 100vw;
-    max-width: none;
-    max-height: none;
+    width: min(94vw, calc((100dvh - 170px) * 3 / 2));
+    max-width: 94vw;
+    max-height: calc(100dvh - 170px);
     aspect-ratio: 3 / 2;
   }
 
@@ -121,43 +114,34 @@
   .photos-row { display: none; }
 
   .controls {
-    position: absolute;
-    z-index: 21;
-    left: 50%;
-    bottom: max(8px, env(safe-area-inset-bottom));
-    transform: translateX(-50%);
-    width: min(calc(100vw - 16px), 430px);
-    max-width: none;
-    grid-template-columns: minmax(78px,1fr) 88px minmax(78px,1fr);
+    position: static;
+    transform: none;
+    width: min(92vw, 430px);
+    max-width: 92vw;
+    grid-template-columns: minmax(78px,1fr) 84px minmax(78px,1fr);
     gap: 8px;
-    margin: 0;
+    margin: 0 auto;
   }
   .shoot-btn {
-    width: 84px;
-    height: 84px;
-    background: rgba(0,0,0,.18);
-    box-shadow: 0 2px 12px rgba(0,0,0,.35);
+    width: 78px;
+    height: 78px;
+    background: transparent;
+    box-shadow: none;
   }
   .controls .secondary-btn {
     padding: 10px 8px;
     font-size: 13px;
-    background: rgba(20,20,24,.70);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
   }
 
   .save-state {
-    position: absolute;
-    z-index: 20;
-    left: 50%;
-    bottom: calc(max(8px, env(safe-area-inset-bottom)) + 92px);
-    transform: translateX(-50%);
-    width: min(calc(100vw - 24px), 420px);
-    min-height: 0;
-    padding: 4px 8px;
-    border-radius: 10px;
-    background: rgba(0,0,0,.42);
-    color: rgba(255,255,255,.86);
+    position: static;
+    transform: none;
+    width: min(92vw, 430px);
+    min-height: 13px;
+    margin: 0 auto;
+    padding: 0 4px;
+    background: transparent;
+    color: var(--muted);
     font-size: 10px;
     line-height: 1.25;
     pointer-events: none;
