@@ -1,0 +1,88 @@
+/* Transparent PNG shooting-window detection + zoom HUD */
+.camera-window-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  background: #000;
+  pointer-events: none;
+  transition: left 160ms ease, top 160ms ease, width 160ms ease, height 160ms ease;
+}
+.camera-window-layer video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+  will-change: transform;
+}
+.preview-wrap.jpeg-background .camera-window-layer { background: transparent; }
+.preview-wrap.jpeg-background .camera-window-layer video { object-fit: contain; background: transparent; }
+.zoom-hud {
+  position: absolute;
+  right: 9px;
+  bottom: 9px;
+  z-index: 7;
+  display: grid;
+  grid-template-columns: 32px minmax(82px, 132px) 32px auto;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 7px;
+  border-radius: 14px;
+  background: rgba(0,0,0,.58);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  touch-action: none;
+}
+.zoom-hud button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.16);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.zoom-hud input[type="range"] { width: 100%; min-width: 82px; accent-color: #fff; }
+.zoom-hud span {
+  min-width: 38px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.preview-wrap.frame-window-detected::after {
+  content: "透過領域 AUTO";
+  position: absolute;
+  left: 9px;
+  bottom: 9px;
+  z-index: 6;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.48);
+  color: rgba(255,255,255,.9);
+  font-size: 10px;
+  font-weight: 750;
+  pointer-events: none;
+}
+@media (max-width: 420px) {
+  .zoom-hud {
+    right: 6px;
+    bottom: 6px;
+    grid-template-columns: 30px minmax(68px, 100px) 30px auto;
+    padding: 5px 6px;
+    gap: 4px;
+  }
+  .zoom-hud button { width: 30px; height: 30px; font-size: 20px; }
+  .zoom-hud span { min-width: 34px; font-size: 11px; }
+  .preview-wrap.frame-window-detected::after { left: 6px; bottom: 6px; }
+}
