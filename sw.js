@@ -1,16 +1,18 @@
 'use strict';
-const CACHE = 'framecam-local-v1-pages-20260821-max-camera-adaptive-frame-v1';
+const CACHE = 'framecam-local-v1-pages-20260821-transparent-window-zoom-v1';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './camera-enhancements.css',
+  './frame-window-zoom.css',
   './app-1.js',
   './app-2.js',
   './app-3.js',
   './app-4.js',
   './app-5.js',
   './app-6.js',
+  './app-7.js',
   './manifest.webmanifest'
 ];
 
