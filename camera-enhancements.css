@@ -38,61 +38,130 @@
   transform-origin: center;
 }
 
-@media (max-width: 700px) {
-  html, body { min-height: 100dvh; }
-  body { overflow: hidden; }
-  .app-shell {
-    height: 100dvh;
+/* iPhone portrait: use the mathematical maximum size that keeps the entire
+   2:3 frame visible. UI floats in the unused top/bottom space instead of
+   shrinking the finder. */
+@media (max-width: 700px) and (orientation: portrait) {
+  html, body {
+    width: 100%;
     min-height: 100dvh;
-    padding: max(4px, env(safe-area-inset-top)) 4px max(5px, env(safe-area-inset-bottom));
-    gap: 4px;
     overflow: hidden;
   }
-  .topbar {
-    min-height: 34px;
-    padding: 0 4px;
+  body { background: #000; }
+
+  .app-shell {
+    position: relative;
+    width: 100vw;
+    height: 100dvh;
+    min-height: 100dvh;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
   }
-  .app-title { font-size: 16px; }
-  .privacy-state { display: none; }
-  .topbar .ghost-btn { padding: 8px 10px; border-radius: 10px; }
+
+  .topbar {
+    position: absolute;
+    z-index: 20;
+    top: max(6px, env(safe-area-inset-top));
+    left: 0;
+    right: 0;
+    min-height: 36px;
+    padding: 0 8px;
+    pointer-events: none;
+  }
+  .topbar > div { display: none; }
+  .topbar .ghost-btn {
+    margin-left: auto;
+    padding: 8px 11px;
+    border-radius: 11px;
+    background: rgba(0,0,0,.52);
+    border-color: rgba(255,255,255,.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: auto;
+  }
 
   .camera-section {
-    gap: 4px;
-    min-height: 0;
-    justify-content: flex-start;
+    position: relative;
+    display: block;
+    width: 100vw;
+    height: 100dvh;
+    min-height: 100dvh;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
   }
+
   .preview-wrap {
-    margin: 0 auto;
-    border-radius: 10px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    border-radius: 0;
     outline: 0;
     box-shadow: none;
   }
+
   .preview-wrap.portrait {
-    width: min(calc(100vw - 8px), calc((100dvh - 150px) * 2 / 3));
-    max-width: calc(100vw - 8px);
-    max-height: calc(100dvh - 150px);
+    width: 100vw;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: 2 / 3;
   }
+
   .preview-wrap.landscape {
-    width: min(calc(100vw - 8px), calc((100dvh - 150px) * 3 / 2));
-    max-width: calc(100vw - 8px);
-    max-height: calc(100dvh - 150px);
+    width: 100vw;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: 3 / 2;
   }
-  .status-row { display: none; }
+
+  .status-row,
+  .photos-row { display: none; }
+
   .controls {
-    width: 100%;
-    max-width: 430px;
+    position: absolute;
+    z-index: 21;
+    left: 50%;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    width: min(calc(100vw - 16px), 430px);
+    max-width: none;
     grid-template-columns: minmax(78px,1fr) 88px minmax(78px,1fr);
     gap: 8px;
+    margin: 0;
   }
-  .shoot-btn { width: 82px; height: 82px; }
-  .controls .secondary-btn { padding: 10px 8px; font-size: 13px; }
+  .shoot-btn {
+    width: 84px;
+    height: 84px;
+    background: rgba(0,0,0,.18);
+    box-shadow: 0 2px 12px rgba(0,0,0,.35);
+  }
+  .controls .secondary-btn {
+    padding: 10px 8px;
+    font-size: 13px;
+    background: rgba(20,20,24,.70);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
   .save-state {
-    min-height: 14px;
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    bottom: calc(max(8px, env(safe-area-inset-bottom)) + 92px);
+    transform: translateX(-50%);
+    width: min(calc(100vw - 24px), 420px);
+    min-height: 0;
+    padding: 4px 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,.42);
+    color: rgba(255,255,255,.86);
     font-size: 10px;
-    line-height: 1.3;
-    padding: 0 4px;
+    line-height: 1.25;
+    pointer-events: none;
   }
-  .photos-row { display: none; }
 }
 
 @media (orientation: landscape) and (max-height: 620px) {
