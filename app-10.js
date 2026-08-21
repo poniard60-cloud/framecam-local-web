@@ -10,15 +10,11 @@ const FRAME_SHOOTING_AREA_SCALE = 1.10;
 function scaleWindowBoundsForLargerShootingArea(bounds) {
   if (!bounds) return null;
 
-  const cx = bounds.x + bounds.w / 2;
-  const cy = bounds.y + bounds.h / 2;
-  const scaledW = bounds.w * FRAME_SHOOTING_AREA_SCALE;
-  const scaledH = bounds.h * FRAME_SHOOTING_AREA_SCALE;
-
-  let x0 = cx - scaledW / 2;
-  let y0 = cy - scaledH / 2;
-  let x1 = cx + scaledW / 2;
-  let y1 = cy + scaledH / 2;
+  // Match the PNG overlay's transform: scale around the full frame center.
+  let x0 = 0.5 + (bounds.x - 0.5) * FRAME_SHOOTING_AREA_SCALE;
+  let y0 = 0.5 + (bounds.y - 0.5) * FRAME_SHOOTING_AREA_SCALE;
+  let x1 = 0.5 + (bounds.x + bounds.w - 0.5) * FRAME_SHOOTING_AREA_SCALE;
+  let y1 = 0.5 + (bounds.y + bounds.h - 0.5) * FRAME_SHOOTING_AREA_SCALE;
 
   x0 = clamp(x0, 0, 1);
   y0 = clamp(y0, 0, 1);
