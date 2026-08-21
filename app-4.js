@@ -1,8 +1,7 @@
 // iPhone写真アプリ互換: JPEG/PNGに加え、写真アプリからHEIC/HEIFで渡された場合は
 // Safari内だけでJPEGへ変換してから既存のフレーム処理へ渡します。
 els.frameInput.accept = 'image/jpeg,image/png,image/heic,image/heif';
-const framePickerLabel = els.frameInput.closest('label')?.querySelector('span');
-if (framePickerLabel) framePickerLabel.textContent = '写真アプリからJPEG / PNGを選ぶ';
+const framePickerBtn = document.getElementById('framePickerBtn');
 
 const loadFrameBase = loadFrame;
 loadFrame = async function loadFrameWithPhotoCompatibility(file) {
@@ -84,6 +83,20 @@ els.cameraFacingSelect.addEventListener('change', e => {
   settings.cameraFacing = e.target.value === 'user' ? 'user' : 'environment';
   persistSettings();
   if (cameraWanted) void startCamera();
+});
+
+framePickerBtn?.addEventListener('click', () => {
+  // Must run synchronously inside the user's tap gesture for iOS Safari.
+  try {
+    if (typeof els.frameInput.showPicker === 'function') {
+      els.frameInput.showPicker();
+    } else {
+      els.frameInput.click();
+    }
+  } catch (err) {
+    console.warn('showPicker unavailable; falling back to click()', err);
+    els.frameInput.click();
+  }
 });
 
 els.frameInput.addEventListener('change', e => void loadFrame(e.target.files?.[0]));
