@@ -37,10 +37,10 @@
         <button id="shootBtn" class="shoot-btn" type="button" disabled aria-label="撮影"><span></span></button>
         <button id="lastBtn" class="secondary-btn" type="button" disabled>直前確認</button>
       </div>
-      <div id="saveState" class="save-state">撮影すると完成JPEGの保存処理を開始します</div>
+      <div id="saveState" class="save-state">撮影後、写真アプリ保存用の共有画面を開きます</div>
       <div class="photos-row">
-        <button id="photosImportBtn" class="primary-btn" type="button">写真アプリへ取り込む</button>
-        <button id="photosHelpBtn" class="ghost-btn" type="button">初回設定</button>
+        <button id="photosImportBtn" class="primary-btn" type="button">従来方式で写真アプリへ取り込む</button>
+        <button id="photosHelpBtn" class="ghost-btn" type="button">従来方式の設定</button>
       </div>
     </section>
 
@@ -68,14 +68,14 @@
           <label class="toggle-row"><span>背景帯を付ける</span><input id="titleBand" type="checkbox" checked /></label>
         </div>
         <button id="resetCountBtn" class="ghost-btn wide" type="button">撮影枚数を0に戻す</button>
-        <div class="note-box"><strong>安全設計</strong><p>この撮影画面は画像をアップロードしません。画像合成はSafari内で行います。写真アプリへの取込はApple標準ショートカットを使い、iCloud写真の同期はiOS側に任せます。</p></div>
+        <div class="note-box"><strong>安全設計</strong><p>画像合成はSafari内で行い、撮影JPEGは通常Downloadsへ保存せずiOSの共有機能へ渡します。共有画面で「画像を保存」を選ぶと写真アプリへ保存できます。</p></div>
       </div>
     </dialog>
 
     <dialog id="photosHelpDialog">
       <div class="settings-panel">
-        <div class="dialog-head"><h2>写真アプリへの取込設定</h2><button id="closePhotosHelp" class="ghost-btn" type="button">閉じる</button></div>
-        <div class="note-box important"><strong>0円・外部送信なし</strong><p>SafariはWebページから写真ライブラリへ直接書き込めないため、Apple標準の「ショートカット」で端末内のJPEGを写真アプリへ移します。iCloud写真の同期はiOS側に任せます。</p></div>
+        <div class="dialog-head"><h2>従来方式の取込設定</h2><button id="closePhotosHelp" class="ghost-btn" type="button">閉じる</button></div>
+        <div class="note-box important"><strong>直接共有が使えない場合のみ</strong><p>通常は撮影後の共有画面から「画像を保存」を選んでください。共有機能を使えない端末では、従来のDownloads＋Apple標準ショートカット方式を使用できます。</p></div>
         <ol class="setup-list">
           <li>Safariのダウンロード先を「このiPhone内」に設定します。</li>
           <li>「ショートカット」アプリで <strong>FrameCam写真取込</strong> を新規作成します。</li>
@@ -91,8 +91,8 @@
         <div class="dialog-head"><h2>直前の写真</h2><button id="closeLast" class="ghost-btn" type="button">閉じる</button></div>
         <img id="lastImage" alt="直前に撮影した写真" />
         <div id="lastFilename" class="filename"></div>
-        <button id="downloadLastBtn" class="primary-btn wide" type="button">もう一度保存</button>
-        <div class="note-box"><strong>撮り直す場合</strong><p>この画面を閉じてもう一度撮影してください。不要写真は写真アプリ取込後に削除してください。</p></div>
+        <button id="downloadLastBtn" class="primary-btn wide" type="button">写真アプリへ保存</button>
+        <div class="note-box"><strong>撮り直す場合</strong><p>この画面を閉じてもう一度撮影してください。</p></div>
       </div>
     </dialog>
   </main>
@@ -101,5 +101,6 @@
   <script src="app-2.js" defer></script>
   <script src="app-3.js" defer></script>
   <script src="app-4.js" defer></script>
+  <script src="app-5.js" defer></script>
 </body>
 </html>
