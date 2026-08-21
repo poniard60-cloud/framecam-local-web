@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'framecam-local-v1-pages-20260821-direct-photo-picker';
+const CACHE = 'framecam-local-v1-pages-20260821-direct-photo-save';
 const ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const ASSETS = [
   './app-2.js',
   './app-3.js',
   './app-4.js',
+  './app-5.js',
   './manifest.webmanifest'
 ];
 
