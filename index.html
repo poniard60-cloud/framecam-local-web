@@ -52,8 +52,12 @@
         </div>
         <label class="field"><span>仕上がり</span><select id="orientationSelect"><option value="landscape">L判 横（3:2）</option><option value="portrait">L判 縦（2:3）</option></select></label>
         <label class="field"><span>カメラの向き</span><select id="cameraFacingSelect"><option value="environment">背面カメラ</option><option value="user">前面カメラ</option></select></label>
-        <label class="field"><span>写真アプリからフレーム／背景を選ぶ</span><input id="frameInput" type="file" accept="image/jpeg,image/png" /></label>
-        <div class="small-note">PNGは透過を保ったフレーム、JPEGは透過なしの背景素材として端末内で合成します。</div>
+        <div class="field">
+          <span>オリジナルフレーム</span>
+          <button id="framePickerBtn" class="primary-btn wide" type="button">写真アプリからフレームを選ぶ</button>
+          <input id="frameInput" type="file" accept="image/jpeg,image/png,image/heic,image/heif" hidden />
+        </div>
+        <div class="small-note">JPEG / PNG対応。iPhone写真がHEIC/HEIFで渡された場合も、Safari内だけでJPEGへ変換して使用します。</div>
         <button id="clearFrameBtn" class="ghost-btn wide" type="button">フレームを外す</button>
         <label class="toggle-row"><span>タイトルを入れる</span><input id="titleEnabled" type="checkbox" /></label>
         <div id="titleFields" class="title-fields" hidden>
