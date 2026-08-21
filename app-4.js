@@ -1,3 +1,57 @@
+// iPhone写真アプリ互換: JPEG/PNGに加え、写真アプリからHEIC/HEIFで渡された場合は
+// Safari内だけでJPEGへ変換してから既存のフレーム処理へ渡します。
+els.frameInput.accept = 'image/jpeg,image/png,image/heic,image/heif';
+const framePickerLabel = els.frameInput.closest('label')?.querySelector('span');
+if (framePickerLabel) framePickerLabel.textContent = '写真アプリからJPEG / PNGを選ぶ';
+
+const loadFrameBase = loadFrame;
+loadFrame = async function loadFrameWithPhotoCompatibility(file) {
+  if (!file) return;
+
+  const detected = await detectImageFormat(file);
+  if (detected) return loadFrameBase(file);
+
+  const mime = String(file.type || '').toLowerCase();
+  const looksLikeHeic = mime === 'image/heic' || mime === 'image/heif' || /\.(heic|heif)$/i.test(file.name || '');
+  if (!looksLikeHeic) return loadFrameBase(file);
+
+  setStatus('iPhone写真をJPEGに変換しています…');
+  let objectUrl = null;
+  try {
+    objectUrl = URL.createObjectURL(file);
+    const image = new Image();
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = () => reject(new Error('heic-decode-failed'));
+      image.src = objectUrl;
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    const ctx = canvas.getContext('2d', { alpha: false });
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(image, 0, 0);
+
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
+    if (!blob) throw new Error('jpeg-convert-failed');
+
+    const name = String(file.name || 'frame').replace(/\.(heic|heif)$/i, '') + '.jpg';
+    const converted = new File([blob], name, {
+      type: 'image/jpeg',
+      lastModified: file.lastModified || Date.now()
+    });
+    return loadFrameBase(converted);
+  } catch (err) {
+    console.error(err);
+    els.frameInput.value = '';
+    setStatus('このiPhone写真を読み込めませんでした。JPEGまたはPNGに書き出してから選択してください。', true);
+  } finally {
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+  }
+};
+
 els.cameraBtn.addEventListener('click', () => void startCamera());
 els.shootBtn.addEventListener('click', capture);
 els.settingsBtn.addEventListener('click', () => {
