@@ -9,6 +9,7 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="camera-enhancements.css" />
+  <link rel="stylesheet" href="frame-window-zoom.css" />
 </head>
 <body>
   <main class="app-shell">
@@ -58,7 +59,7 @@
           <button id="framePickerBtn" class="primary-btn wide" type="button">写真アプリからフレームを選ぶ</button>
           <input id="frameInput" type="file" accept="image/jpeg,image/png,image/heic,image/heif" hidden />
         </div>
-        <div class="small-note">JPEG / PNG対応。撮影の縦横を変更するとフレームも自動で同じ向きに合わせます。</div>
+        <div class="small-note">JPEG / PNG対応。PNGは透過領域を自動認識して撮影範囲を合わせます。撮影の縦横を変えるとフレームも自動追従します。</div>
         <button id="clearFrameBtn" class="ghost-btn wide" type="button">フレームを外す</button>
         <label class="toggle-row"><span>タイトルを入れる</span><input id="titleEnabled" type="checkbox" /></label>
         <div id="titleFields" class="title-fields" hidden>
@@ -69,7 +70,7 @@
           <label class="toggle-row"><span>背景帯を付ける</span><input id="titleBand" type="checkbox" checked /></label>
         </div>
         <button id="resetCountBtn" class="ghost-btn wide" type="button">撮影枚数を0に戻す</button>
-        <div class="note-box"><strong>安全設計</strong><p>画像合成はSafari内で行い、撮影JPEGは通常Downloadsへ保存せずiOSの共有機能へ渡します。AFはiPhone標準AFを使用し、対応端末では連続AFを要求します。</p></div>
+        <div class="note-box"><strong>安全設計</strong><p>画像合成・PNG透過解析・デジタルズーム処理はSafari内で行います。AFはiPhone標準AFを使用し、対応端末では連続AFとネイティブズームを利用します。</p></div>
       </div>
     </dialog>
 
@@ -104,5 +105,6 @@
   <script src="app-4.js" defer></script>
   <script src="app-5.js" defer></script>
   <script src="app-6.js" defer></script>
+  <script src="app-7.js" defer></script>
 </body>
 </html>
