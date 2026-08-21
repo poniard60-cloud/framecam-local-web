@@ -1,0 +1,114 @@
+/* FrameCam shooting-view enhancements */
+.frame-preview-badge {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 5;
+  max-width: calc(100% - 20px);
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.58);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  backdrop-filter: blur(5px);
+}
+
+.preview-wrap.landscape .frame-overlay.frame-auto-rotate {
+  inset: auto;
+  left: 50%;
+  top: 50%;
+  width: 66.666667%;
+  height: 150%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  transform-origin: center;
+}
+.preview-wrap.portrait .frame-overlay.frame-auto-rotate {
+  inset: auto;
+  left: 50%;
+  top: 50%;
+  width: 150%;
+  height: 66.666667%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  transform-origin: center;
+}
+
+@media (max-width: 700px) {
+  html, body { min-height: 100dvh; }
+  body { overflow: hidden; }
+  .app-shell {
+    height: 100dvh;
+    min-height: 100dvh;
+    padding: max(4px, env(safe-area-inset-top)) 4px max(5px, env(safe-area-inset-bottom));
+    gap: 4px;
+    overflow: hidden;
+  }
+  .topbar {
+    min-height: 34px;
+    padding: 0 4px;
+  }
+  .app-title { font-size: 16px; }
+  .privacy-state { display: none; }
+  .topbar .ghost-btn { padding: 8px 10px; border-radius: 10px; }
+
+  .camera-section {
+    gap: 4px;
+    min-height: 0;
+    justify-content: flex-start;
+  }
+  .preview-wrap {
+    margin: 0 auto;
+    border-radius: 10px;
+    outline: 0;
+    box-shadow: none;
+  }
+  .preview-wrap.portrait {
+    width: min(calc(100vw - 8px), calc((100dvh - 150px) * 2 / 3));
+    max-width: calc(100vw - 8px);
+    max-height: calc(100dvh - 150px);
+  }
+  .preview-wrap.landscape {
+    width: min(calc(100vw - 8px), calc((100dvh - 150px) * 3 / 2));
+    max-width: calc(100vw - 8px);
+    max-height: calc(100dvh - 150px);
+  }
+  .status-row { display: none; }
+  .controls {
+    width: 100%;
+    max-width: 430px;
+    grid-template-columns: minmax(78px,1fr) 88px minmax(78px,1fr);
+    gap: 8px;
+  }
+  .shoot-btn { width: 82px; height: 82px; }
+  .controls .secondary-btn { padding: 10px 8px; font-size: 13px; }
+  .save-state {
+    min-height: 14px;
+    font-size: 10px;
+    line-height: 1.3;
+    padding: 0 4px;
+  }
+  .photos-row { display: none; }
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  .app-shell { padding: 4px; }
+  .topbar { min-height: 30px; }
+  .preview-wrap {
+    height: calc(100dvh - 42px);
+    max-height: calc(100dvh - 42px);
+    border-radius: 8px;
+  }
+  .camera-section {
+    grid-template-columns: minmax(0, 1fr) 170px;
+  }
+  .controls {
+    grid-template-columns: 1fr;
+    width: 160px;
+  }
+  .shoot-btn { width: 74px; height: 74px; }
+}
