@@ -99,9 +99,7 @@
   gap: 12px;
   margin-bottom: 10px;
 }
-.frame-library-head strong {
-  font-size: 14px;
-}
+.frame-library-head strong { font-size: 14px; }
 .frame-library-head span {
   color: var(--muted);
   font-size: 12px;
@@ -160,9 +158,7 @@
   height: 100%;
   object-fit: contain;
 }
-.frame-library-meta {
-  min-width: 0;
-}
+.frame-library-meta { min-width: 0; }
 .frame-library-meta strong,
 .frame-library-meta small {
   display: block;
@@ -170,9 +166,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.frame-library-meta strong {
-  font-size: 13px;
-}
+.frame-library-meta strong { font-size: 13px; }
 .frame-library-meta small {
   margin-top: 4px;
   color: var(--muted);
@@ -190,21 +184,57 @@
   font-weight: 700;
 }
 
+/* Mobile shooting view: keep the multi-frame selector very compact so the
+   finder remains the dominant element. The old 235px reserve made the finder
+   noticeably too small on iPhone. */
 @media (max-width: 700px) and (orientation: portrait) {
   .preview-wrap.portrait {
-    width: min(92vw, calc((100dvh - 235px) * 2 / 3));
+    width: min(92vw, calc((100dvh - 185px) * 2 / 3));
     max-width: 92vw;
-    max-height: calc(100dvh - 235px);
+    max-height: calc(100dvh - 185px);
   }
   .preview-wrap.landscape {
-    width: min(94vw, calc((100dvh - 235px) * 3 / 2));
+    width: min(94vw, calc((100dvh - 185px) * 3 / 2));
     max-width: 94vw;
-    max-height: calc(100dvh - 235px);
+    max-height: calc(100dvh - 185px);
   }
   .frame-quick-picker {
-    flex: 0 0 64px;
+    flex: 0 0 48px;
     width: 92vw;
+    min-height: 48px;
+    gap: 5px;
+    padding: 1px 0 2px;
+    align-items: center;
   }
+  .frame-quick-choice {
+    flex: 0 0 48px;
+    width: 48px;
+    min-width: 48px;
+  }
+  .frame-quick-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+  .frame-quick-label { display: none; }
+  .frame-add-thumb { font-size: 21px; }
+}
+
+/* Short iPhones need a few more pixels for the primary controls. Keep the
+   finder larger than the previous library layout while hiding only the
+   non-essential status sentence. */
+@media (max-width: 700px) and (orientation: portrait) and (max-height: 720px) {
+  .save-state { display: none; }
+  .preview-wrap.portrait {
+    width: min(92vw, calc((100dvh - 165px) * 2 / 3));
+    max-height: calc(100dvh - 165px);
+  }
+  .preview-wrap.landscape {
+    width: min(94vw, calc((100dvh - 165px) * 3 / 2));
+    max-height: calc(100dvh - 165px);
+  }
+  .shoot-btn { width: 70px; height: 70px; }
+  .controls { grid-template-columns: minmax(74px,1fr) 76px minmax(74px,1fr); }
 }
 
 @media (orientation: landscape) and (max-height: 620px) {
@@ -212,18 +242,18 @@
     grid-column: 2;
     grid-row: 2;
     width: 100%;
-    min-height: 58px;
+    min-height: 50px;
     align-self: end;
   }
   .frame-quick-choice {
-    flex-basis: 50px;
-    width: 50px;
-    min-width: 50px;
+    flex-basis: 46px;
+    width: 46px;
+    min-width: 46px;
   }
   .frame-quick-thumb {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
   }
-  .frame-quick-label { max-width: 50px; }
+  .frame-quick-label { display: none; }
   .photos-row { display: none; }
 }
