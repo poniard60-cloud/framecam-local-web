@@ -76,12 +76,14 @@ function forcePngOverlayAboveCameraV6() {
   if (frameFormat !== 'png' || !frameImage) return;
 
   if (canonicalFrameCanvasV6) {
-    canonicalFrameDataUrlV6 = canonicalFrameCanvasV6.toDataURL('image/png');
-    els.frameOverlay.src = canonicalFrameDataUrlV6;
+    if (!canonicalFrameDataUrlV6) {
+      canonicalFrameDataUrlV6 = canonicalFrameCanvasV6.toDataURL('image/png');
+    }
+    if (els.frameOverlay.getAttribute('src') !== canonicalFrameDataUrlV6) {
+      els.frameOverlay.setAttribute('src', canonicalFrameDataUrlV6);
+    }
   }
 
-  // The canonical canvas is already in the selected shooting orientation, so
-  // it must not receive the old 2:3/3:2 rotation geometry again.
   els.frameOverlay.classList.remove('frame-auto-rotate');
   els.frameOverlay.hidden = false;
   els.frameOverlay.style.inset = '0';
@@ -159,14 +161,13 @@ analyzeCurrentPngWindow = function analyzeCurrentPngWindowThreeByFourV6() {
     if (pseudo?.bounds) clearDetectedPseudoWindowV6(targetCanvas, pseudo.bounds);
 
     canonicalFrameCanvasV6 = targetCanvas;
+    canonicalFrameDataUrlV6 = '';
     canonicalFrameImageV6 = frameImage;
     canonicalFrameOrientationV6 = settings.orientation;
     frameWindowTargetCoordinatesV6 = true;
     frameWindowSource = bounds;
     frameWindowImage = frameImage;
 
-    // app-8 may hold a source-coordinate processed canvas. Do not let that
-    // stale geometry override the canonical 3:4 result.
     if (typeof processedPngOverlayCanvasV2 !== 'undefined') processedPngOverlayCanvasV2 = null;
     if (typeof processedPngOverlayDataUrlV2 !== 'undefined') processedPngOverlayDataUrlV2 = null;
 
@@ -180,8 +181,6 @@ analyzeCurrentPngWindow = function analyzeCurrentPngWindowThreeByFourV6() {
         : '3:4フレームの撮影窓を認識して透明化しました');
     } else {
       delete els.previewWrap.dataset.windowMethod;
-      // A real transparent PNG still works visually here because the camera is
-      // kept full-size behind the PNG. AUTO fitting is simply not applied.
       setStatus('フレームを3:4で表示しました。透過窓はカメラ全面表示で確認できます');
     }
   } catch (err) {
@@ -191,9 +190,9 @@ analyzeCurrentPngWindow = function analyzeCurrentPngWindowThreeByFourV6() {
     frameWindowTargetCoordinatesV6 = true;
     activeFrameWindow = null;
 
-    // Even when AUTO analysis fails, never hide the selected frame.
     try {
       canonicalFrameCanvasV6 = drawFrameIntoTargetCanvasV6(frameImage);
+      canonicalFrameDataUrlV6 = '';
       canonicalFrameImageV6 = frameImage;
       canonicalFrameOrientationV6 = settings.orientation;
       forcePngOverlayAboveCameraV6();
@@ -221,8 +220,6 @@ updateFramePreviewOrientation = function updateFramePreviewOrientationThreeByFou
   if (frameFormat === 'png' && frameImage) forcePngOverlayAboveCameraV6();
 };
 
-// If an earlier frame-library restore is still running when this script loads,
-// refresh once it settles. Also restores the selected library item if needed.
 async function restoreActiveFrameAfterUpgradeV6() {
   if (frameImage) {
     updateFramePreviewOrientation();
