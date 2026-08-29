@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'framecam-local-v1-pages-20260829-frame-overlay-alpha-fix-v3';
+const CACHE = 'framecam-local-v1-pages-20260829-underlay-checker-fix-v1';
 const ASSETS = [
   './',
   './index.html',
@@ -19,6 +19,7 @@ const ASSETS = [
   './app-10.js',
   './app-11.js',
   './app-12.js',
+  './app-13.js',
   './manifest.webmanifest'
 ];
 
