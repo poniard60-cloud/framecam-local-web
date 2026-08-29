@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'framecam-local-v1-pages-20260824-frame-library-finder-fix-v1';
+const CACHE = 'framecam-local-v1-pages-20260829-aspect-3x4-v1';
 const ASSETS = [
   './',
   './index.html',
@@ -17,6 +17,7 @@ const ASSETS = [
   './app-8.js',
   './app-9.js',
   './app-10.js',
+  './app-11.js',
   './manifest.webmanifest'
 ];
 
