@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="theme-color" content="#0b0b0c" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://api.github.com; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';" />
+  <title>FrameCam 管理者</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-head">
+      <div>
+        <p class="eyebrow">FRAMECAM LOCAL</p>
+        <h1>管理者ダッシュボード</h1>
+        <p class="sub">GitHub Pages のアクセス状況（直近14日）</p>
+      </div>
+      <a class="back-link" href="./">撮影画面へ</a>
+    </header>
+
+    <section class="panel auth-panel" aria-labelledby="authTitle">
+      <div>
+        <h2 id="authTitle">GitHubに接続</h2>
+        <p>このリポジトリのTraffic情報を読めるGitHubトークンを入力してください。トークンは保存せず、この画面を閉じると消えます。</p>
+      </div>
+      <div class="auth-row">
+        <label class="token-field">
+          <span>GitHub Token</span>
+          <input id="tokenInput" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_... / ghp_..." />
+        </label>
+        <button id="loadBtn" class="primary" type="button">アクセス状況を表示</button>
+      </div>
+      <p id="authStatus" class="status" aria-live="polite">未接続</p>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div class="summary-grid">
+        <article class="metric"><span>ページ閲覧</span><strong id="viewCount">—</strong><small id="viewUnique">—</small></article>
+        <article class="metric"><span>ユニーク訪問者</span><strong id="uniqueVisitors">—</strong><small>GitHub集計値</small></article>
+        <article class="metric"><span>リポジトリClone</span><strong id="cloneCount">—</strong><small id="cloneUnique">—</small></article>
+        <article class="metric muted-metric"><span>現在利用中</span><strong>取得不可</strong><small>GitHub Trafficはリアルタイム接続数を提供しません</small></article>
+      </div>
+
+      <section class="panel">
+        <div class="section-head">
+          <div><h2>日別アクセス</h2><p>過去14日のページ閲覧数とユニーク訪問者数</p></div>
+          <button id="refreshBtn" class="ghost" type="button">更新</button>
+        </div>
+        <div id="dailyChart" class="daily-chart" aria-label="日別アクセスグラフ"></div>
+        <p id="updatedAt" class="updated"></p>
+      </section>
+
+      <div class="two-col">
+        <section class="panel">
+          <div class="section-head"><div><h2>参照元</h2><p>どこからアクセスされたか</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>参照元</th><th>閲覧</th><th>Unique</th></tr></thead><tbody id="referrerBody"></tbody></table></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-head"><div><h2>よく見られたページ</h2><p>GitHubが集計した人気パス</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>ページ</th><th>閲覧</th><th>Unique</th></tr></thead><tbody id="pathBody"></tbody></table></div>
+        </section>
+      </div>
+
+      <section class="panel privacy-panel">
+        <h2>この管理画面で分かる範囲</h2>
+        <p>閲覧数・ユニーク訪問者数・参照元などの集計値を表示します。アクセスした個人名、IPアドレス、撮影画像、登録フレーム、撮影回数は取得しません。</p>
+      </section>
+    </section>
+  </main>
+  <script src="admin.js" defer></script>
+</body>
+</html>
