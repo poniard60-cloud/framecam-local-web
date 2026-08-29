@@ -76,8 +76,12 @@ function forcePngOverlayAboveCameraV6() {
   if (frameFormat !== 'png' || !frameImage) return;
 
   if (canonicalFrameCanvasV6) {
-    canonicalFrameDataUrlV6 = canonicalFrameCanvasV6.toDataURL('image/png');
-    els.frameOverlay.src = canonicalFrameDataUrlV6;
+    if (!canonicalFrameDataUrlV6) {
+      canonicalFrameDataUrlV6 = canonicalFrameCanvasV6.toDataURL('image/png');
+    }
+    if (els.frameOverlay.getAttribute('src') !== canonicalFrameDataUrlV6) {
+      els.frameOverlay.setAttribute('src', canonicalFrameDataUrlV6);
+    }
   }
 
   els.frameOverlay.classList.remove('frame-auto-rotate');
@@ -157,6 +161,7 @@ analyzeCurrentPngWindow = function analyzeCurrentPngWindowThreeByFourV6() {
     if (pseudo?.bounds) clearDetectedPseudoWindowV6(targetCanvas, pseudo.bounds);
 
     canonicalFrameCanvasV6 = targetCanvas;
+    canonicalFrameDataUrlV6 = '';
     canonicalFrameImageV6 = frameImage;
     canonicalFrameOrientationV6 = settings.orientation;
     frameWindowTargetCoordinatesV6 = true;
@@ -187,6 +192,7 @@ analyzeCurrentPngWindow = function analyzeCurrentPngWindowThreeByFourV6() {
 
     try {
       canonicalFrameCanvasV6 = drawFrameIntoTargetCanvasV6(frameImage);
+      canonicalFrameDataUrlV6 = '';
       canonicalFrameImageV6 = frameImage;
       canonicalFrameOrientationV6 = settings.orientation;
       forcePngOverlayAboveCameraV6();
