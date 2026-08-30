@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
   <meta name="theme-color" content="#0d1117" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://api.github.com; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://api.github.com https://ntfy.sh; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';" />
   <title>FrameCam 管理者</title>
   <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-live.css" />
 </head>
 <body>
   <main class="admin-shell">
@@ -15,10 +16,10 @@
       <div>
         <div class="title-line"><span class="brand-dot"></span><p class="eyebrow">FRAMECAM LOCAL / ADMIN</p></div>
         <h1>管理者ダッシュボード</h1>
-        <p class="sub">アクセス状況と公開状態をまとめて確認します。</p>
+        <p class="sub">アクセス状況・利用端末・撮影数・公開状態をまとめて確認します。</p>
       </div>
       <div class="head-actions">
-        <button id="copyAppUrlBtn" class="ghost compact" type="button">URLをコピー</button>
+        <button id="copyAppUrlBtn" class="ghost compact" type="button">通常URLをコピー</button>
         <a class="back-link" href="./">撮影画面を開く</a>
       </div>
     </header>
@@ -31,9 +32,9 @@
 
     <section class="panel connection-panel" aria-labelledby="authTitle">
       <div class="connection-copy">
-        <div class="section-kicker">DATA CONNECTION</div>
+        <div class="section-kicker">GITHUB TRAFFIC / OPTIONAL</div>
         <h2 id="authTitle">GitHub Trafficに接続</h2>
-        <p>Trafficと公開状態を取得するためのGitHubトークンを入力します。トークンは保存せず、画面を閉じると破棄します。</p>
+        <p>14日間のページ閲覧統計も見る場合だけGitHubトークンを入力します。リアルタイム端末監視はGitHubトークンなしで利用できます。</p>
       </div>
       <div class="auth-row">
         <label class="token-field">
@@ -48,7 +49,7 @@
       </div>
       <div class="status-line">
         <span id="connectionDot" class="status-dot"></span>
-        <p id="authStatus" class="status" aria-live="polite">未接続</p>
+        <p id="authStatus" class="status" aria-live="polite">GitHub未接続（リアルタイム監視とは別機能です）</p>
       </div>
     </section>
 
@@ -57,16 +58,16 @@
         <article class="metric"><span>ページ閲覧 / 14日</span><strong id="viewCount">—</strong><small id="viewUnique">GitHub接続後に表示</small></article>
         <article class="metric"><span>ユニーク訪問者</span><strong id="uniqueVisitors">—</strong><small>GitHub集計値</small></article>
         <article class="metric"><span>公開アプリ</span><strong id="releaseLabel">確認前</strong><small id="deployShort">gh-pages</small></article>
-        <article class="metric warn-metric"><span>現在利用中</span><strong>未収集</strong><small>リアルタイム利用ログ基盤は未導入</small></article>
+        <article class="metric warn-metric"><span>現在利用中</span><strong>未設定</strong><small>無料監視を開始すると表示</small></article>
       </div>
 
       <div class="overview-grid">
         <section class="panel">
           <div class="section-head"><div><div class="section-kicker">APP HEALTH</div><h2>FrameCam 運用状態</h2></div><button id="refreshBtn" class="ghost compact" type="button">更新</button></div>
           <div class="health-list">
-            <div class="health-row"><span class="health-icon" id="publishHealthIcon"></span><div><strong>公開ページ</strong><small id="publishHealth">接続後に確認</small></div></div>
+            <div class="health-row"><span class="health-icon" id="publishHealthIcon"></span><div><strong>公開ページ</strong><small id="publishHealth">GitHub接続後に確認</small></div></div>
             <div class="health-row"><span class="health-icon" id="ratioHealthIcon"></span><div><strong>撮影比率</strong><small id="ratioHealth">3:4 / 4:3 を確認します</small></div></div>
-            <div class="health-row"><span class="health-icon" id="privacyHealthIcon"></span><div><strong>撮影画面の外部通信</strong><small id="privacyHealth">CSPを確認します</small></div></div>
+            <div class="health-row"><span class="health-icon" id="privacyHealthIcon"></span><div><strong>撮影画面の外部通信</strong><small id="privacyHealth">画像送信なし / 匿名運用ログのみ許可</small></div></div>
             <div class="health-row"><span class="health-icon" id="cacheHealthIcon"></span><div><strong>オフラインキャッシュ</strong><small id="cacheHealth">Service Workerを確認します</small></div></div>
           </div>
         </section>
@@ -78,16 +79,16 @@
             <div><span>ブラウザ</span><strong id="deviceBrowser">—</strong></div>
             <div><span>画面</span><strong id="deviceScreen">—</strong></div>
             <div><span>通信</span><strong id="deviceOnline">—</strong></div>
-            <div><span>管理画面</span><strong>v2</strong></div>
+            <div><span>管理画面</span><strong>v3 / Zero Cost</strong></div>
           </div>
-          <p class="fine-note">ここに表示するのは管理画面を開いている端末だけです。他の利用者の端末情報は現在収集していません。</p>
+          <p class="fine-note">イベント端末は個人名ではなくランダムな匿名端末IDで識別します。</p>
         </section>
       </div>
 
       <section class="panel notice-panel">
         <div class="section-kicker">PRIVACY BOUNDARY</div>
-        <h2>取得しない情報</h2>
-        <p>撮影画像、カメラ映像、端末内に登録したフレーム、個人名、IPアドレスはこの管理画面へ送信しません。現段階のアクセス情報はGitHubが提供する集計値のみです。</p>
+        <h2>画像は管理側へ送信しません</h2>
+        <p>撮影画像、カメラ映像、端末内に登録したフレーム、タイトル文言、氏名は送信しません。無料監視を有効にした端末だけ、匿名端末ID・利用時刻・ブラウザ種別・画面サイズ・縦横・本日の撮影枚数を運用ログとして送信します。</p>
       </section>
     </section>
 
@@ -96,7 +97,7 @@
         <article class="metric"><span>ページ閲覧</span><strong id="trafficViewCount">—</strong><small>直近14日</small></article>
         <article class="metric"><span>ユニーク</span><strong id="trafficUnique">—</strong><small>直近14日</small></article>
         <article class="metric"><span>リポジトリClone</span><strong id="cloneCount">—</strong><small id="cloneUnique">—</small></article>
-        <article class="metric muted-metric"><span>リアルタイム</span><strong>対象外</strong><small>GitHub Trafficはリアルタイム接続数を提供しません</small></article>
+        <article class="metric muted-metric"><span>リアルタイム</span><strong>未設定</strong><small>無料監視を開始すると表示</small></article>
       </div>
 
       <section class="panel">
@@ -136,7 +137,7 @@
           <div class="section-kicker">SECURITY</div>
           <h2>公開ページの安全設定</h2>
           <div class="health-list compact-list">
-            <div class="health-row"><span class="health-icon" id="sysConnectIcon"></span><div><strong>connect-src</strong><small id="sysConnectText">確認前</small></div></div>
+            <div class="health-row"><span class="health-icon" id="sysConnectIcon"></span><div><strong>connect-src</strong><small id="sysConnectText">ntfy.shのみ許可（匿名運用ログ）</small></div></div>
             <div class="health-row"><span class="health-icon" id="sysFrameIcon"></span><div><strong>フレーム処理</strong><small id="sysFrameText">確認前</small></div></div>
             <div class="health-row"><span class="health-icon" id="sysRatioIcon"></span><div><strong>3:4撮影</strong><small id="sysRatioText">確認前</small></div></div>
           </div>
@@ -144,16 +145,17 @@
       </div>
 
       <section class="panel roadmap-panel">
-        <div class="section-kicker">NEXT MANAGEMENT FEATURES</div>
-        <h2>今後ここへ追加する管理機能</h2>
+        <div class="section-kicker">MANAGEMENT FEATURES</div>
+        <h2>管理機能の状態</h2>
         <div class="roadmap-grid">
-          <div><strong>利用端末一覧</strong><span>匿名端末ID・最終アクセス・現在利用中</span><em>バックエンド導入後</em></div>
+          <div><strong>利用端末一覧</strong><span>匿名端末ID・最終アクセス・現在利用中</span><em>導入済み / 0円</em></div>
           <div><strong>フレーム配布管理</strong><span>管理側からイベント用フレームを登録・公開</span><em>次段階</em></div>
-          <div><strong>利用ログ</strong><span>撮影画像を送らず、起動・撮影回数だけ集計</span><em>次段階</em></div>
+          <div><strong>利用ログ</strong><span>撮影画像を送らず、起動・撮影回数だけ集計</span><em>導入済み / 0円</em></div>
         </div>
       </section>
     </section>
   </main>
   <script src="admin.js" defer></script>
+  <script src="admin-live.js" defer></script>
 </body>
 </html>
