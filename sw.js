@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'framecam-local-v1-pages-20260830-zero-cost-live-monitor-v2';
+const CACHE = 'framecam-local-v1-pages-20260830-zero-cost-live-monitor-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -28,6 +28,7 @@ const ASSETS = [
   './admin-live.css',
   './admin-live.js',
   './admin-live-v2.js',
+  './admin-public.js',
   './manifest.webmanifest'
 ];
 
