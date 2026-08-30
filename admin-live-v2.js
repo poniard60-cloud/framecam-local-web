@@ -20,3 +20,12 @@ if (typeof livePatchOldSummary === 'function') {
     }
   };
 }
+
+// Public repository health needs no token; load it as a same-origin script.
+if (!document.querySelector('script[data-admin-public]')) {
+  const script = document.createElement('script');
+  script.src = './admin-public.js';
+  script.defer = true;
+  script.dataset.adminPublic = '1';
+  document.head.appendChild(script);
+}
