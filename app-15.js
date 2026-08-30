@@ -11,7 +11,7 @@ const FRAMECAM_MONITOR_CAPTURE_KEY = 'framecam.monitor.captureToday.v1';
 const FRAMECAM_MONITOR_LAST_SEND_KEY = 'framecam.monitor.lastSend.v1';
 const FRAMECAM_MONITOR_ENDPOINT = 'https://ntfy.sh';
 const FRAMECAM_MONITOR_HEARTBEAT_MS = 15 * 60 * 1000;
-const FRAMECAM_MONITOR_VISIBLE_REFRESH_MS = 5 * 60 * 1000;
+const FRAMECAM_MONITOR_VISIBLE_REFRESH_MS = 10 * 60 * 1000;
 
 function monitorRandomId(bytes = 16) {
   const data = new Uint8Array(bytes);
@@ -138,13 +138,13 @@ function monitorIncrementCapture(delta = 1) {
   monitorEnsureDay();
   const next = monitorCaptureToday() + Math.max(1, Number(delta) || 1);
   localStorage.setItem(FRAMECAM_MONITOR_CAPTURE_KEY, String(next));
-  void monitorSend('capture');
 }
 
 if (framecamMonitorTopic) {
   monitorSetPrivacyLabel();
 
-  // Report successful capture count changes rather than button taps.
+  // Count successful JPEG creations locally. Capture totals are included in
+  // heartbeat/close messages, so message volume never scales with photo count.
   if (typeof updateCount === 'function') {
     const updateCountBaseMonitor = updateCount;
     let observedCaptureCount = Number(typeof captureCount !== 'undefined' ? captureCount : 0) || 0;
@@ -167,4 +167,5 @@ if (framecamMonitorTopic) {
   });
 
   window.addEventListener('online', () => { void monitorSend('heartbeat'); });
+  window.addEventListener('pagehide', () => { void monitorSend('close'); });
 }
