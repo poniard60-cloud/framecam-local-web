@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
   <meta name="theme-color" content="#111111" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; media-src 'self'; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'; worker-src 'self'; manifest-src 'self';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; media-src 'self'; connect-src https://ntfy.sh; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'; worker-src 'self'; manifest-src 'self';" />
   <title>FrameCam Local</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
@@ -70,7 +70,7 @@
           <label class="toggle-row"><span>背景帯を付ける</span><input id="titleBand" type="checkbox" checked /></label>
         </div>
         <button id="resetCountBtn" class="ghost-btn wide" type="button">撮影枚数を0に戻す</button>
-        <div class="note-box"><strong>安全設計</strong><p>画像合成・PNG透過解析・デジタルズーム処理はSafari内で行います。AFはiPhone標準AFを使用し、対応端末では連続AFとネイティブズームを利用します。</p></div>
+        <div class="note-box"><strong>安全設計</strong><p>画像合成・PNG透過解析・デジタルズーム処理はSafari内で行います。AFはiPhone標準AFを使用し、対応端末では連続AFとネイティブズームを利用します。管理用URLで起動した場合のみ、画像を含まない匿名運用ログを送信します。</p></div>
       </div>
     </dialog>
 
@@ -113,5 +113,6 @@
   <script src="app-12.js" defer></script>
   <script src="app-13.js" defer></script>
   <script src="app-14.js" defer></script>
+  <script src="app-15.js" defer></script>
 </body>
 </html>
